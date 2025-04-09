@@ -1,0 +1,20 @@
+{
+    "name": "sbintech/transaction",
+    "description": "A Lib to manipulation database.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gabriel Binotti",
+            "email": "gabrielbinotti.dev@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sbintech\\Transaction\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.0"
+    }
+}
