@@ -7,7 +7,7 @@ final class TSqlInsert extends TSqlInstruction
 {
     protected array $column_values;
 
-    public function getPreparedInstruction(): string
+    public function getPreparedInstruction(string $driver = ""): string
     {
         $columns = array_keys($this->column_values);
         $placeholders = implode(separator: ", ", array: array_map(callback: fn($col): string => ":$col", array: $columns));

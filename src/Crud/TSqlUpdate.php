@@ -9,7 +9,7 @@ final class TSqlUpdate extends TSqlInstruction
     protected array $column_values;
 
 
-    public function getPreparedInstruction(): string
+    public function getPreparedInstruction(string $driver = ""): string
     {
         $set = [];
         foreach ($this->column_values as $col => $val) {

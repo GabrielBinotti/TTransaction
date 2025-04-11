@@ -8,7 +8,7 @@ namespace Sbintech\Transaction\Crud;
 final class TSqlDelete extends TSqlInstruction
 {
 
-    public function getPreparedInstruction(): string
+    public function getPreparedInstruction(string $driver = ""): string
     {
         
         $this->sql = "DELETE FROM {$this->entity}";

@@ -72,6 +72,6 @@ abstract class TSqlInstruction
         
     }
 
-    abstract public function getPreparedInstruction():string;
+    abstract public function getPreparedInstruction(string $drive = ""):string;
     abstract public function execute(\PDO $pdo):mixed;
 }

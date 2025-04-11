@@ -10,7 +10,7 @@ final class TSqlSelect extends TSqlInstruction
     private $order = "";
     private $limit = "";
 
-    public function getPreparedInstruction(): string
+    public function getPreparedInstruction(string $driver = ""): string
     {
 
         $this->sql = "SELECT {$this->column->dump()} FROM {$this->entity}";
@@ -35,14 +35,19 @@ final class TSqlSelect extends TSqlInstruction
         $this->order = " ORDER BY {$column} {$type}";
     }
 
-    public function setLimit(int $limit, int $offset = 0)
+    public function setLimit(int $limit, int $offset = 0, \PDO $pdo)
     {
+        $driver = $this->getDriver(pdo: $pdo);
+
         if ($offset == 0) {
 
             $this->limit = " LIMIT {$limit}";
         } else {
-            
-            $this->limit = " LIMIT {$limit} OFFSET {$offset}";
+            if ($driver == "pgsql") {
+                $this->limit = " OFFSET {$offset} LIMIT {$limit}";
+            }else if ($driver == "mysql") {
+                $this->limit = " LIMIT {$limit},{$offset}";
+            }
         }
     }
 
@@ -54,9 +59,16 @@ final class TSqlSelect extends TSqlInstruction
 
     public function execute(\PDO $pdo): array|object
     {
-        $stmt = $pdo->prepare(query: $this->getPreparedInstruction());
+        $driver = $this->getDriver(pdo: $pdo);
+        $stmt = $pdo->prepare(query: $this->getPreparedInstruction(driver: $driver));
         $this->bindValues(stmt: $stmt);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+
+    private function getDriver(\PDO $pdo)
+    {
+        return $pdo->getAttribute(attribute: \PDO::ATTR_DRIVER_NAME);
     }
 }
